@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>SkyrimDB</title>
+        <meta name="description" content="Roughly 155 characters">
+        {% load static %}
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" type="text/css">
+    
+        <style>
+          .btn-yellow
+          {
+            background-color: #EE5;
+            color:#FFF;
+            border-color: #EE5;
+          }
+          .btn-default
+          {
+            background-color: #fdf800;
+            color:#FFF;
+            border-color: #fdf800;            
+          }
+          .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active, .open .dropdown-toggle.btn-default
+          {
+            background-color: #9d9700;
+            color:#FFF;
+            border-color: #9d9700;
+          }
+          .btn-cool-blue
+          {
+            background-color: #68889E;
+            color:#FFF;
+            border-color: #2F3E48;            
+          }
+          .btn-cool-blue:hover, .btn-cool-blue:focus, .btn-cool-blue:active, .btn-cool-blue.active, .open .dropdown-toggle.btn-cool-blue
+          {
+            background-color: #2F3E48;
+            color:#FFF;
+            border-color: #31347B;
+          }
+        </style>
+    
+    </head>
+    <body class="bg-dark text-light">
+        <!-- NAVBAR:
+             color: style="background-color:#cfbcbc" -->
+        <nav class="navbar navbar-expand navbar-light bg-secondary" style="background-color:#eeeeee">
+            <div class="container-fluid ">
+                <a href="/" class="navbar-brand">
+                    <img src="{% static 'img/skyrim-logo-700x394.png'%}"
+                    width=48 height=71
+                    class="d-inline-block">
+                    <font size="+2" style="font-weight:350;">SKYRIM</font><font size="+2"  style="font-weight:300; color:#cccccc"><!--class="text-light"--></font>
+                </a>
+
+                <div class="collapse navbar-collapse" id="navbarN">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/"> Home </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/admin/SkyrimApp/"> Admin </a>
+                        </li>
+                        <li "nav-item">
+                            <a class="nav-link disabled" tabindex="-1" href="/login" aria-disabled="true">Login</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        {% block content %}
+            Here goes the content. :D
+        {% endblock %}
+    </body>
+</html>

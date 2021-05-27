@@ -1,0 +1,45 @@
+{% extends 'SkyrimApp/base.html' %}
+
+{% block content %}
+
+<div class="container text-center px-2 py-4 overflow-hidden">
+    <div class="row gx-4 gy-0 row-cols-2">
+        <div class="col">
+            <div class="card border-secondary text-white bg-dark">
+            {% comment %} <div class="card text-white bg-dark" style="border-color:#bdb000"> {% endcomment %}
+                <div class="card-body">
+                    <h5 class="card-title">Filtros</h5>
+                    <p class="card-text">
+                        Permite filtrar datos de los <b>modelos</b> existentes tanto en
+                        una sola batalla o globalmente (en todas las batallas registradas).
+                    </p>
+                    <div class="py-2">
+                        <a href="/visualize/battle/" class="btn btn-default text-dark" role="button">
+                            Batalla
+                        </a>
+                    </div>
+                    <div class="py-2">
+                        <a href="/visualize/global/" class="btn btn-default text-dark" role="button">
+                            Global
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card border-secondary text-white bg-dark">
+                <div class="card-body">
+                    <h5 class="card-title">Página de administración</h5>
+                    <p class="card-text">
+                        Permite añadir, modificar y eliminar objetos de la base de datos.
+                    </p>
+                    <a href="/admin/SkyrimApp/" class="btn btn-default text-dark">
+                        Admininstrar
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

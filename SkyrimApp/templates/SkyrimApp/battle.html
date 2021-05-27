@@ -1,0 +1,65 @@
+{% extends 'SkyrimApp/base.html' %}
+
+{% block content %}
+
+    {% if not items %}
+    
+    <div class="container">
+        <form class="row g-3" action="/visualize/battle/" method="post">
+            <div class="row g-3">
+                <!-- Form contents: -->
+                <div class="col-md-6">
+                    {{ form.selected_battle.label_tag }}
+                    {{ form.selected_battle }}
+                </div>
+                <div class="col-md-4">
+                    {{ form.selected_object.label_tag }}
+                    {{ form.selected_object }}
+                </div>
+                <div class="col-md-2">
+                    {{ form.amount.label_tag }}
+                    {{ form.amount }}
+                </div>
+                <div class="row-gl">
+                    {% for choice in form.sorted_object %}
+                    <div class="col">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="flexRadioDefault1">
+                            <label class="form-check-label" for="flexRadioDefault1">
+                                {{ choice }}
+                            </label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-12">
+                <input type="submit" class="btn btn-default text-dark" value="POST">
+            </div>
+        </form>
+    </div>
+
+    {% else %}
+        <div id="table">
+            <table  class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        {% for attr_head in labels %}
+                            <th scope="col">{{ attr_head }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for attr_list in items %}
+                        <tr scope="col">
+                            {% for attr in attr_list %}
+                                <td scope="row">{{ attr }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+{% endblock content %}
