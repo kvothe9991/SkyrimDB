@@ -59,8 +59,16 @@ class Participante(models.Model):
     inf = models.ForeignKey(TipoDD, CASCADE,
         related_name="%(class)s_inf", verbose_name='Daño') #daño que inflige 
 
+    def __get_name__(self):
+        if hasattr(self, 'bestia'):
+            return self.bestia.nombreB
+        elif hasattr(self, 'jugador'):
+            return self.jugador.personaje.nombreP
+        else:
+            raise ValueError('No debería haber un participante que no es de tipo de alguno de sus hijos...')
+
     def __str__(self):
-        return f"Participante_{str(self.idPar)}"
+        return f"{self.__get_name__()}"
 
 
 class Batalla(models.Model):
@@ -80,13 +88,13 @@ class Batalla(models.Model):
         return self.evento_set.count()
 
 
-class Bestia(models.Model):
+class Bestia(Participante):
 
-    particiante = models.OneToOneField(Participante, CASCADE, primary_key=True) #tiene restricción de unicidad
-    nombreB = models.CharField(max_length=200)
-    razaB = models.CharField(max_length=200)
-    puntosDB = models.IntegerField()
-    puntosSB = models.IntegerField()
+    participante = models.OneToOneField(Participante, CASCADE, primary_key=True, related_name="%(class)s", parent_link=True) #tiene restricción de unicidad
+    nombreB = models.CharField(max_length=200, verbose_name='Nombre')
+    razaB = models.CharField(max_length=200, verbose_name='Raza')
+    puntosDB = models.IntegerField(verbose_name='Daño')
+    puntosSB = models.IntegerField(verbose_name='Salud')
 
     class Meta:
         ordering = ["nombreB"]
@@ -95,8 +103,8 @@ class Bestia(models.Model):
         return self.nombreB
 
 
-class Jugador(models.Model):
-    participante = models.OneToOneField(Participante, CASCADE, related_name="%(class)s") #tiene restricción de unicidad
+class Jugador(Participante):
+    participante = models.OneToOneField(Participante, CASCADE, related_name="%(class)s", parent_link=True) #tiene restricción de unicidad
     personaje = models.OneToOneField(Personaje, CASCADE, related_name="%(class)s") #tiene restricción de unicidad
     hechizo = models.ForeignKey(Hechizo, CASCADE, related_name='%(class)s')
 
@@ -119,6 +127,8 @@ class Evento(models.Model):
     saludDA = models.IntegerField(verbose_name='Salud del Atacante')
     noE = models.IntegerField(verbose_name='Número de Evento')
     
+    def __str__(self):
+        return f"Evento #{self.noE} - {self.batalla.lugar}"
 
     class Meta:
         ordering = ["batalla"]
