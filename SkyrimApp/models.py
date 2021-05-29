@@ -82,7 +82,7 @@ class Batalla(models.Model):
         ordering = ["fecha"]
 
     def __str__(self):
-        return f'{self.lugar} - {str(self.fecha)}'
+        return f'{self.lugar} - {str(self.fecha.date()).replace("-", "/")}'
 
     def duration(self):
         return self.evento_set.count()

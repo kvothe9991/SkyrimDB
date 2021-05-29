@@ -1,6 +1,6 @@
 from django import forms
 from django.db import models
-from django.db.models import Count
+from django.db.models import Count, Q
 from .models import Batalla, Hechizo, Participante
 
 class GlobalObjectsForm(forms.Form):
@@ -11,16 +11,18 @@ class GlobalObjectsForm(forms.Form):
     BATALLAS = 'BAT'
     BATALLAS_DURAC = 'BAT_DUT'
     PARTICIPANTES = 'PAR'
+    PARTICIPANTES_EVENT = 'PAR_EVE'
     PARTICIPANTES_DMG = 'PAR_DMG'
     PARTICIPANTES_BAT = 'PAR_BTL'
     CHOICES = [ 
-        (HECHIZO, 'Hechizos ordenados por nombre'),
         (HECHIZO_USADOS, 'Hechizos ordenados por cantidad de veces usados'),
-        (BATALLAS, 'Batallas ordenadas por fecha'),
+        (HECHIZO, 'Hechizos ordenados por nombre'),
         (BATALLAS_DURAC, 'Batallas ordenadas por duración'),
-        (PARTICIPANTES, 'Participantes ordenados por tipo'),
-        (PARTICIPANTES_DMG, 'Participantes ordenados por daño realizado'),
-        (PARTICIPANTES_BAT, 'Participantes ordenados por cantidad de batallas ganadas')
+        (BATALLAS, 'Batallas ordenadas por fecha'),
+        (PARTICIPANTES, 'Participantes desordenados'),
+        (PARTICIPANTES_BAT, 'Participantes ordenados por cantidad de batallas ganadas'),
+        (PARTICIPANTES_EVENT, 'Participantes ordenados por cantidad de enemigos derrotados'),
+        (PARTICIPANTES_DMG, 'Participantes ordenados por daño realizado')
     ]
 
     # ASCENDING/DESCENDING:
@@ -44,6 +46,7 @@ class GlobalObjectsForm(forms.Form):
         HECHIZO_USADOS: ('Hechizos', 'Veces lanzado'),
         BATALLAS_DURAC: ('Batallas', 'Duración'),
         PARTICIPANTES_BAT: ('Participantes', 'Batallas ganadas'),
+        PARTICIPANTES_EVENT: ('Participantes', 'Enemigos derrotados'),
         PARTICIPANTES_DMG: ('Participantes', 'Daño realizado')
     }
 
@@ -53,7 +56,8 @@ class GlobalObjectsForm(forms.Form):
     annotation_data = {
         HECHIZO_USADOS: ('eventos', models.Count),
         BATALLAS_DURAC: ('eventos__noE', models.Max),
-        PARTICIPANTES_BAT: ('eventos_ganados', models.Count),
+        PARTICIPANTES_BAT: ('sobreviviente', models.Count),
+        PARTICIPANTES_EVENT: ('eventos_ganados', models.Count),
         PARTICIPANTES_DMG: ('eventos_ganados__hlanzado__puntosDH', models.Sum)
     }
 
@@ -114,13 +118,13 @@ class ObjectsFromBattleForm(forms.Form):
 
         if selection == self.PARTICIPANTE:
             labels = ('Participantes',)
-            items =  Participante.objects.filter(eventos_ganados__batalla=battle).union(
-                     Participante.objects.filter(eventos_perdidos__batalla=battle))
+            items =  Participante.objects.filter( 
+                Q(eventos_ganados__batalla=battle) | Q(eventos_perdidos__batalla=battle))
             if sort_option == self.SORT_DMG:
                 x = 'eventos_ganados__hlanzado__puntosDH'
                 items = items.annotate(dmg=models.Sum(x)).order_by('-dmg')
                 items = [ (i, i.dmg) for i in items ]
-                labels = (label[0], 'Daño')
+                labels = (labels[0], 'Daño')
             else:
                 items = [ (i,) for i in items ]
 
