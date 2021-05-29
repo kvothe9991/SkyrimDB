@@ -28,7 +28,7 @@ class GlobalObjectsForm(forms.Form):
     # ASCENDING/DESCENDING:
     ASCENDING = 'ASC'
     DESCENDING = 'DESC'
-    ORDER_CHOICES = [(ASCENDING,'Ascendiente'), (DESCENDING,'Descendiente')]
+    ORDER_CHOICES = [(ASCENDING,'Ascendente'), (DESCENDING,'Descendente')]
 
     # FIELDS:
     selection = forms.ChoiceField(choices=CHOICES, label='Objeto seleccionado', required=True)
